@@ -22,6 +22,7 @@ except ImportError:  # The install command in the project guide adds these packa
 
 from streamlit_dss_core import geohash_bounds, geohash_encode
 from streamlit_dss_data import historical_deliveries, route_lookup, state_centroids
+from streamlit_dss_chatbot import screen_assistant
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -1142,8 +1143,11 @@ def render_app():
     current_route = st.session_state.get("routeops_selected_route", route_options[0])
     if current_route not in route_options:
         current_route = route_options[0]
-    screen = st.sidebar.radio("RouteOps", ["Route Overview", "Route Detail", "Seller Performance"],
-                              key="routeops_screen")
+    screen = st.sidebar.radio("RouteOps", ["Route Overview", "Route Detail", "Seller Performance",
+                                           "Data Assistant"], key="routeops_screen")
+    if screen == "Data Assistant":
+        screen_assistant(history)
+        return
     if screen == "Route Overview":
         selected_route = current_route
     else:
